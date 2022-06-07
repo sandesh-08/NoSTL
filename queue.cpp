@@ -68,6 +68,9 @@ class Queue {
             }
             cout<<"\n";
         }
+        int size() {
+            return this->sz;
+        }
 };
 
 int main() {
