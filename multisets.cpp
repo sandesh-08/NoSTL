@@ -4,10 +4,12 @@ using namespace std;
 struct Node {
     private:
         int data;
+        int cnt;
         Node *left,*right;
     public:
         Node(int val) {
             this->data=val;
+            this->cnt=1;
             this->left=NULL;
             this->right=NULL;
         }
@@ -15,7 +17,7 @@ struct Node {
         void print(Node* root) {
             if(!root) return ;
             print(root->left);
-            cout<<root->data<<" ";
+            for(int i=0;i<root->cnt;i++) cout<<root->data<<" ";
             print(root->right);
         }
 
@@ -32,7 +34,10 @@ struct Node {
                 root->right=add(root->right,num);
                 return root;
             }
-            else return root;
+            else {
+                root->cnt=1+root->cnt;
+                return root;
+            }
         }
 
         int maxLeft(Node* root) {
@@ -45,25 +50,28 @@ struct Node {
             if(root->data>num) root->left=deleteNode(root->left,num);
             else if(root->data<num) root->right=deleteNode(root->right,num);
             else {
-                if(!root->left && !root->right) {
-                    delete root;
-                    return NULL;
-                }
-                else if(!root->left) {
-                    Node* ret=root->right;
-                    delete root;
-                    return ret;
-                }
-                else if(!root->right) {
-                    Node* ret=root->left;
-                    delete root;
-                    return ret;
-                }
-                else {
-                    int maxi=maxLeft(root->left);
-                    root->data=maxi;
-                    root->left=deleteNode(root->right,maxi);
-                    return root;
+                root->cnt--;
+                if(root->cnt==0) {
+                    if(!root->left && !root->right) {
+                        delete root;
+                        return NULL;
+                    }
+                    else if(!root->left) {
+                        Node* ret=root->right;
+                        delete root;
+                        return ret;
+                    }
+                    else if(!root->right) {
+                        Node* ret=root->left;
+                        delete root;
+                        return ret;
+                    }
+                    else {
+                        int maxi=maxLeft(root->left);
+                        root->data=maxi;
+                        root->left=deleteNode(root->right,maxi);
+                        return root;
+                    }
                 }
             }
             return root;
@@ -92,7 +100,6 @@ class Set {
             this->sz=copySet.sz;
         }
         void insert(int num) {
-            if(root->find(root,num)) return ;
             root=root->add(root,num);
             this->sz++;
         }
@@ -117,13 +124,18 @@ class Set {
 int main() {
     Set st;
     st.insert(10);
-    st.insert(100);
-    st.insert(5);
-    st.insert(4);
+    st.display();
+    st.insert(10);
+    st.display();
+    st.insert(10);
+    st.display();
+    st.insert(10);
     st.insert(5);
     st.display();
     cout<<st.size()<<"\n";
     st.remove(5);
     st.display();
     cout<<st.size()<<"\n";
+    cout<<st.search(10)<<"\n";
+    cout<<st.search(10000)<<"\n";
 }
