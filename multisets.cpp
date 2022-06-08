@@ -85,19 +85,19 @@ struct Node {
         }
 };
 
-class Set {
+class MultiSet {
     private:
         Node* root;
         int sz;
 
     public: 
-        Set() {
+        MultiSet() {
             root=NULL;
             sz=0;
         }
-        Set(Set& copySet) {
-            this->root=copySet.root;
-            this->sz=copySet.sz;
+        MultiSet(MultiSet& copyMultiSet) {
+            this->root=copyMultiSet.root;
+            this->sz=copyMultiSet.sz;
         }
         void insert(int num) {
             root=root->add(root,num);
@@ -122,7 +122,7 @@ class Set {
 };
 
 int main() {
-    Set st;
+    MultiSet st;
     st.insert(10);
     st.display();
     st.insert(10);
